@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 
-from models import Article
-
 
 def crawl_page_by_url(url):
     response = requests.get(url)
