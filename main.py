@@ -6,11 +6,22 @@ from utils.db import create_tables
 
 
 def store_all_links():
-    links = get_all_links('sample')
+    crawled_links = get_all_links('sample')
     category = Category.create(name='world')
-    for link in links:
-        article = Article.create(url=link, category=category)
-        print(article.id)
+
+    current_urls = Article.select(Article.url)
+    current_urls_list = [c.url for c in current_urls]
+
+    for link in crawled_links:
+        if link not in current_urls_list:
+            article = Article.create(url=link, category=category)
+            print(article.id)
+
+
+def show_stats():
+    articles_count = Article.select().count()
+    categories_count = Category.select().count()
+    print(f'{articles_count} articles\t{categories_count} categories')
 
 
 if __name__ == '__main__':
@@ -18,3 +29,5 @@ if __name__ == '__main__':
         create_tables()
     elif sys.argv[1] == 'run':
         store_all_links()
+    elif sys.argv[1] == 'status':
+        show_stats()
