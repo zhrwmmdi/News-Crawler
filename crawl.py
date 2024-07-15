@@ -6,12 +6,26 @@ from models import Article
 
 def crawl_page_by_url(url):
     response = requests.get(url)
+    body_text = ''
+    title_text = None
     if response.status_code == 200:
-        html_doc = response.text
-        soup = BeautifulSoup(html_doc, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')
+
         title = soup.find('h1', attrs={'class': 'news-title'})
         if title:
-            print(title.text)
+            title_text = title.text
+
+        body_tag = soup.find('div', attrs={'class': 'news-content'})
+        if body_tag:
+            p_tags = body_tag.find_all('p')
+            for p in p_tags:
+                body_text = body_text + p.text
+        else:
+            body_text = None
+
+    return {'title': title_text, 'body': body_text}
+
+# TODO: obejct oriented and class making
 
 
 def crawl_all_links(topic, page_count=10):
@@ -38,8 +52,3 @@ def validate_links(link_hrefs):
                 link.startswith('https://www.trthaber.com/haber/dunya/')):
             valid_links.append(link)
     return valid_links
-
-# if __name__ == '__main__':
-#     articles = Article.select().where(Article.is_completed == False)
-#     for article in articles:
-#         crawl_page_by_url(article.url)

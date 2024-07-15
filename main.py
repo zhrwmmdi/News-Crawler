@@ -1,6 +1,6 @@
 import sys
 
-from crawl import crawl_all_links
+from crawl import crawl_all_links, crawl_page_by_url
 from models import Article, Category
 from utils.db import create_tables
 
@@ -24,10 +24,22 @@ def show_stats():
     print(f'{articles_count} articles\t{categories_count} categories')
 
 
+def store_articles():
+    articles = Article.select().where(Article.is_completed == False)
+    for article in articles:
+        data = crawl_page_by_url(article.url)
+        article.title = data['title']
+        article.body = data['body']
+        article.is_completed = True
+        article.save()
+
+
 if __name__ == '__main__':
     if sys.argv[1] == 'create_tables':
         create_tables()
-    elif sys.argv[1] == 'run':
+    elif sys.argv[1] == 'crawl_links':
         store_all_links()
     elif sys.argv[1] == 'status':
         show_stats()
+    elif sys.argv[1] == 'crawl_articles':
+        store_articles()
