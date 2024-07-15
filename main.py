@@ -21,7 +21,9 @@ def store_all_links():
 def show_stats():
     articles_count = Article.select().count()
     categories_count = Category.select().count()
-    print(f'{articles_count} articles\t{categories_count} categories')
+    crawled_articles_count = Article.select().where(Article.is_completed == True).count()
+    print(f'{articles_count} articles\t{categories_count} categories\n'
+          f'{crawled_articles_count}/{articles_count} articles crawled')
 
 
 def store_articles():
