@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
+from models import Article, Category
+
 
 def crawl_page_by_url(url):
     response = requests.get(url)
@@ -13,31 +15,22 @@ def crawl_page_by_url(url):
 
 
 def get_all_links(topic):
-    response = requests.get('https://www.trthaber.com/haber/dunya/')
-    html_doc = response.text
-    soup = BeautifulSoup(html_doc,'html.parser')
-    link_tags = soup.find_all('a')
+    link_tags = list()
 
-    links = list()
+    for i in range(10):
+        response = requests.get(f'https://www.trthaber.com/haber/dunya/{i}.sayfa.html')
+        html_doc = response.text
+        soup = BeautifulSoup(html_doc,'html.parser')
+        ll = soup.find_all('a')
+        link_tags.extend(ll)
+
+    link_hrefs = list()
     for tag in link_tags:
-        links.append(tag.get('href'))
+        link_hrefs.append(tag.get('href'))
 
     valid_links = list()
-    for link in links:
+    for link in link_hrefs:
         if link.endswith('html') and link.startswith('https://www.trthaber.com/haber/dunya/'):
             valid_links.append(link)
 
     return valid_links
-
-
-if __name__ == '__main__':
-    # links = [
-    #     'https://www.trthaber.com/haber/dunya/kuzey-koreden-sinirin-kuzeyine-pyongyang-karsiti-brosurler-gonderen-guney-koreye-tepki-868496.html',
-    #     'https://www.trthaber.com/haber/dunya/avrupa-birligi-icin-kader-haftasi-basliyor-868489.html',
-    #     'https://www.trthaber.com/haber/dunya/israilin-gazzeye-gece-boyu-duzenledigi-saldirilarda-cok-sayida-filistinli-oldu-868481.html',
-    # ]
-
-    # for link in links:
-    #     crawl_page_by_url(link)
-
-    get_all_links('sam[le')
