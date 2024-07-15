@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
+from models import Article
+
 
 def crawl_page_by_url(url):
     response = requests.get(url)
@@ -12,7 +14,7 @@ def crawl_page_by_url(url):
             print(title.text)
 
 
-def get_all_links(topic, page_count=10):
+def crawl_all_links(topic, page_count=10):
     link_tags = list()
 
     for i in range(page_count):
@@ -26,7 +28,7 @@ def get_all_links(topic, page_count=10):
     link_hrefs = [tag.get('href') for tag in link_tags]
 
     valid_links = validate_links(link_hrefs)
-    return valid_links
+    return set(valid_links)
 
 
 def validate_links(link_hrefs):
@@ -36,3 +38,8 @@ def validate_links(link_hrefs):
                 link.startswith('https://www.trthaber.com/haber/dunya/')):
             valid_links.append(link)
     return valid_links
+
+# if __name__ == '__main__':
+#     articles = Article.select().where(Article.is_completed == False)
+#     for article in articles:
+#         crawl_page_by_url(article.url)

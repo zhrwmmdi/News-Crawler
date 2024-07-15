@@ -1,12 +1,12 @@
 import sys
 
-from crawl import get_all_links
+from crawl import crawl_all_links
 from models import Article, Category
 from utils.db import create_tables
 
 
 def store_all_links():
-    crawled_links = get_all_links('sample')
+    crawled_links = crawl_all_links('sample')
     category = Category.create(name='world')
 
     current_urls = Article.select(Article.url)
