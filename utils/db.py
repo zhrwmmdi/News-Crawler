@@ -7,27 +7,36 @@ def create_tables():
 
 
 def store_articles():
-    articles = Article.select().where(Article.is_completed is False)
+    articles = Article.select().where(Article.is_completed == False)
+
     for article in articles:
         data = crawl_page_by_url(article.url)
+
+        if data['category'] not in get_current_categories():
+            Category.create(name=data['category'])
+
         article.title = data['title']
         article.body = data['body']
         article.subtitle = data['subtitle']
+        article.category = data['category']
         article.is_completed = True
         article.save()
 
 
-def store_all_links():
-    crawled_links = crawl_all_links('sample')
-    category = Category.create(name='world')
+def get_current_categories():
+    categories = Category.select()
+    current_category_names = [c.name for c in categories]
+    return current_category_names
 
+
+def store_all_links():
+    crawled_links = crawl_all_links()
     current_urls = Article.select(Article.url)
     current_urls_list = [c.url for c in current_urls]
 
     for link in crawled_links:
         if link not in current_urls_list:
-            article = Article.create(url=link, category=category)
-            print(article.id)
+            article = Article.create(url=link)
 
 
 def show_stats():

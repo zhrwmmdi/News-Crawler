@@ -7,6 +7,8 @@ def crawl_page_by_url(url):
     body_text = ''
     title_text = None
     subtitle_text = None
+    category_text = None
+
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -25,14 +27,17 @@ def crawl_page_by_url(url):
         subtitle_tag = soup.find('h2', attrs={'class': 'news-spot'})
         if subtitle_tag:
             subtitle_text = subtitle_tag.text
-            print(subtitle_text)
 
-    return {'title': title_text, 'body': body_text, 'subtitle': subtitle_text}
+        category_tag = soup.find('span', attrs={'class': 'category-tag'})
+        if category_tag:
+            category_text = category_tag.text
+
+    return {'title': title_text, 'body': body_text, 'subtitle': subtitle_text, 'category': category_text}
 
 # TODO: obejct oriented and class making
 
 
-def crawl_all_links(topic, page_count=10):
+def crawl_all_links(page_count = 10):
     link_tags = list()
 
     for i in range(page_count):
@@ -56,11 +61,3 @@ def validate_links(link_hrefs):
                 link.startswith('https://www.trthaber.com/haber/dunya/')):
             valid_links.append(link)
     return valid_links
-
-if __name__ == '__main__':
-    urls = [
-        'https://www.trthaber.com/haber/dunya/penguen-ve-yumurta-galaksileri-ic-ice-goruntulendi-868254.html',
-        'https://www.trthaber.com/haber/dunya/italya-g7-ticaret-bakanlari-toplantisina-turkiyeyi-de-davet-etti-868260.html',
-    ]
-    for u in urls:
-        crawl_page_by_url(u)

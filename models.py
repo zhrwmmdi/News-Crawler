@@ -26,5 +26,5 @@ class Article(BaseModel):
     title = CharField(null=True)
     body = TextField(null=True)
     subtitle = TextField(null=True)
-    category = ForeignKeyField(Category, backref='articles')
+    category = ForeignKeyField(Category, backref='articles', null=True)
     is_completed = BooleanField(default=False)
