@@ -1,73 +1,74 @@
+from abc import ABC, abstractmethod
 import requests
 from bs4 import BeautifulSoup
-import re
+from parse import ArticlePageParser
+from utils.database import DB
+from constants import START_DOMAIN, DEFAULT_DOMAIN
 
 
-def crawl_page_by_url(url):
-    response = requests.get(url)
-    body_text = ''
-    global title_text
-    global subtitle_text
-    global category_text
-    global created_time_text
-    global updated_time_text
+class BaseCrawler(ABC):
 
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
+    @staticmethod
+    def get_page(url, i=None):
+        try:
+            response = requests.get(url)
+        except requests.HTTPError:
+            print('HttpError happened in get method.')
+            return None
+        return response
 
-        title = soup.find('h1', attrs={'class': 'news-title'})
-        if title:
-            title_text = title.text
-
-        body_tag = soup.find('div', attrs={'class': 'news-content'})
-        if body_tag:
-            p_tags = body_tag.find_all('p')
-            for p in p_tags:
-                body_text = body_text + p.text
-        else:
-            body_text = None
-
-        subtitle_tag = soup.find('h2', attrs={'class': 'news-spot'})
-        if subtitle_tag:
-            subtitle_text = subtitle_tag.text
-
-        category_tag = soup.find('span', attrs={'class': 'category-tag'})
-        if category_tag:
-            category_text = category_tag.text
-
-        creation_tag = soup.find('span',attrs={'class': 'created-date'})
-        if creation_tag:
-            creation_tag.find('label').extract()
-            matches = re.findall(r'\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}', creation_tag.text)
-            created_time_text = matches[0]
-            updated_time_text = matches[1]
-
-    return {'title': title_text, 'body': body_text, 'subtitle': subtitle_text, 'category': category_text, 'release_time': created_time_text, 'update_time': updated_time_text}
-
-# TODO: obejct oriented and class making
+    @abstractmethod
+    def start(self):
+        pass
 
 
-def crawl_all_links(page_count = 10):
-    link_tags = list()
+class LinkCrawler(BaseCrawler):
 
-    for i in range(page_count):
-        response = requests.get(
-            f'https://www.trthaber.com/haber/dunya/{i}.sayfa.html'
-        )
-        soup = BeautifulSoup(response.text, 'html.parser')
-        ll = soup.find_all('a')
-        link_tags.extend(ll)
+    @staticmethod
+    def validate_links(link_hrefs):
+        valid_links = list()
+        for link in link_hrefs:
+            if (link.endswith('html') and
+                    link.startswith(START_DOMAIN)):
+                valid_links.append(link)
+        return valid_links
 
-    link_hrefs = [tag.get('href') for tag in link_tags]
+    @classmethod
+    def crawl_all_links(cls, page_count=10):
+        link_tags = list()
 
-    valid_links = validate_links(link_hrefs)
-    return set(valid_links)
+        for i in range(page_count):
+            response = super().get_page(DEFAULT_DOMAIN.format(i))
+            soup = BeautifulSoup(response.text, 'html.parser')
+            ll = soup.find_all('a')
+            link_tags.extend(ll)
+
+        link_hrefs = [tag.get('href') for tag in link_tags]
+
+        valid_links = cls.validate_links(link_hrefs)
+        return set(valid_links)
+
+    def start(self):
+        crawled_links = self.crawl_all_links()
+        db = DB()
+        db.store_all_links(crawled_links)
 
 
-def validate_links(link_hrefs):
-    valid_links = list()
-    for link in link_hrefs:
-        if (link.endswith('html') and
-                link.startswith('https://www.trthaber.com/haber/dunya/')):
-            valid_links.append(link)
-    return valid_links
+class ArticleCrawler(BaseCrawler):
+    def crawl_page_by_url(self, url):
+        global article_data
+        response = self.get_page(url)
+
+        if response.status_code == 200:
+            parser = ArticlePageParser()
+            article_data = parser.parse(response.text)
+
+        return article_data
+
+    def start(self):
+        db = DB()
+
+        not_crawled_articles = db.get_not_crawled_articles()
+        for artcl in not_crawled_articles:
+            data = self.crawl_page_by_url(artcl.url)
+            db.store_article(artcl, data)

@@ -1,19 +1,17 @@
 from datetime import datetime
 from peewee import (
-    Model, SqliteDatabase, CharField,
-    TextField, ForeignKeyField, BooleanField, DateTimeField)
+    Model, CharField,
+    TextField, ForeignKeyField, BooleanField, DateTimeField, SqliteDatabase)
 
-database = SqliteDatabase('Posts.db')
+from constants import DATABASE_NAME
+
+database = SqliteDatabase(DATABASE_NAME)
 
 
 class BaseModel(Model):
     crawled_time = DateTimeField(default=datetime.now())
 
     class Meta:
-        """
-        the Meta class is a special inner class used to
-        provide configuration and metadata about the model
-        """
         database = database
 
 

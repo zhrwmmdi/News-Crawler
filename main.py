@@ -1,12 +1,18 @@
 import sys
-from utils.db import create_tables, store_all_links, show_stats, store_articles
+
+from crawl import LinkCrawler, ArticleCrawler
+from utils.database import DB
 
 if __name__ == '__main__':
+    db = DB()
+
     if sys.argv[1] == 'create_tables':
-        create_tables()
+        db.create_tables()
     elif sys.argv[1] == 'crawl_links':
-        store_all_links()
+        crawler = LinkCrawler()
+        crawler.start()
     elif sys.argv[1] == 'status':
-        show_stats()
+        db.show_stats()
     elif sys.argv[1] == 'crawl_articles':
-        store_articles()
+        crawler = ArticleCrawler()
+        crawler.start()
