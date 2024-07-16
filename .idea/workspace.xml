@@ -10,7 +10,7 @@
       <change afterPath="$PROJECT_DIR$/utils/Sqllite.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/utils/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Posts.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Posts.db" beforeDir="false" afterPath="$PROJECT_DIR$/trthaber.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crawl.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawl.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/models.py" afterDir="false" />
