@@ -25,5 +25,6 @@ class Article(BaseModel):
     url = CharField()
     title = CharField(null=True)
     body = TextField(null=True)
+    subtitle = TextField(null=True)
     category = ForeignKeyField(Category, backref='articles')
     is_completed = BooleanField(default=False)

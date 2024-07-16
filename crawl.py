@@ -6,6 +6,7 @@ def crawl_page_by_url(url):
     response = requests.get(url)
     body_text = ''
     title_text = None
+    subtitle_text = None
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -21,7 +22,12 @@ def crawl_page_by_url(url):
         else:
             body_text = None
 
-    return {'title': title_text, 'body': body_text}
+        subtitle_tag = soup.find('h2', attrs={'class': 'news-spot'})
+        if subtitle_tag:
+            subtitle_text = subtitle_tag.text
+            print(subtitle_text)
+
+    return {'title': title_text, 'body': body_text, 'subtitle': subtitle_text}
 
 # TODO: obejct oriented and class making
 
@@ -50,3 +56,11 @@ def validate_links(link_hrefs):
                 link.startswith('https://www.trthaber.com/haber/dunya/')):
             valid_links.append(link)
     return valid_links
+
+if __name__ == '__main__':
+    urls = [
+        'https://www.trthaber.com/haber/dunya/penguen-ve-yumurta-galaksileri-ic-ice-goruntulendi-868254.html',
+        'https://www.trthaber.com/haber/dunya/italya-g7-ticaret-bakanlari-toplantisina-turkiyeyi-de-davet-etti-868260.html',
+    ]
+    for u in urls:
+        crawl_page_by_url(u)
