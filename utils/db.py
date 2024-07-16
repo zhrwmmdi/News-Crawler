@@ -19,6 +19,8 @@ def store_articles():
         article.body = data['body']
         article.subtitle = data['subtitle']
         article.category = data['category']
+        article.released_time = data['release_time']
+        article.update_time = data['update_time']
         article.is_completed = True
         article.save()
 
@@ -36,7 +38,7 @@ def store_all_links():
 
     for link in crawled_links:
         if link not in current_urls_list:
-            article = Article.create(url=link)
+            Article.create(url=link)
 
 
 def show_stats():

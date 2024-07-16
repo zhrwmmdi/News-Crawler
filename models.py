@@ -7,7 +7,7 @@ database = SqliteDatabase('Posts.db')
 
 
 class BaseModel(Model):
-    created_time = DateTimeField(default=datetime.now())
+    crawled_time = DateTimeField(default=datetime.now())
 
     class Meta:
         """
@@ -28,3 +28,5 @@ class Article(BaseModel):
     subtitle = TextField(null=True)
     category = ForeignKeyField(Category, backref='articles', null=True)
     is_completed = BooleanField(default=False)
+    released_time = DateTimeField(null=True)
+    update_time = DateTimeField(null=True)

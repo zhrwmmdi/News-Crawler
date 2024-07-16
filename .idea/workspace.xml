@@ -37,14 +37,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.crawl.executor": "Run",
-    "Python.main.executor": "Run",
+    "Python.crawl.executor": "Debug",
+    "Python.main.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/Hp/Desktop/pythonLearning/Crawler"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
     <configuration name="crawl" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="NewsCrawler" />
       <option name="ENV_FILES" value="" />

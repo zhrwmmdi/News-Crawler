@@ -1,13 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 
 def crawl_page_by_url(url):
     response = requests.get(url)
     body_text = ''
-    title_text = None
-    subtitle_text = None
-    category_text = None
+    global title_text
+    global subtitle_text
+    global category_text
+    global created_time_text
+    global updated_time_text
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -32,7 +35,14 @@ def crawl_page_by_url(url):
         if category_tag:
             category_text = category_tag.text
 
-    return {'title': title_text, 'body': body_text, 'subtitle': subtitle_text, 'category': category_text}
+        creation_tag = soup.find('span',attrs={'class': 'created-date'})
+        if creation_tag:
+            creation_tag.find('label').extract()
+            matches = re.findall(r'\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}', creation_tag.text)
+            created_time_text = matches[0]
+            updated_time_text = matches[1]
+
+    return {'title': title_text, 'body': body_text, 'subtitle': subtitle_text, 'category': category_text, 'release_time': created_time_text, 'update_time': updated_time_text}
 
 # TODO: obejct oriented and class making
 
