@@ -8,7 +8,6 @@ each article, and stores the data in a SQLite database.
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
-- [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
@@ -37,26 +36,6 @@ efficiency and reliability throughout the scraping process.
 - **Link Crawler**: Collects all article links from the "world" category.
 - **Article Crawler**: Retrieves detailed information for each article.
 - **SQLite Database**: Stores the collected data efficiently.
-
-## Project Structure
-my_project/
-├── my_project/
-
-│   ├── __init__.py
-│   ├── constants.py
-│   ├── database.py
-│   ├── article_page_parser.py
-│   ├── crawl.py
-│   ├── main.py
-│   └── ...
-├── tests/
-│   ├── __init__.py
-│   ├── test_article_page_parser.py
-│   ├── test_crawl.py
-│   └── ...
-├── README.md
-├── setup.py
-└── requirements.txt
 
 ## Installation
 
