@@ -4,7 +4,7 @@ database.py
 This module defines the DB class which manages the SQLite database operations
 of the whole project for Articles and Categories using the Peewee ORM.
 """
-from utils.models import Article, Category, database
+from src.utils.models import Article, Category, database
 
 
 class DB:

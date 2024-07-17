@@ -8,7 +8,7 @@ from peewee import (
     Model, CharField,
     TextField, ForeignKeyField, BooleanField, DateTimeField, SqliteDatabase)
 
-from constants import DATABASE_NAME
+from src.constants import DATABASE_NAME
 
 # Initialize the database connection
 database = SqliteDatabase(DATABASE_NAME)
