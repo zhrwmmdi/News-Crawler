@@ -5,11 +5,57 @@ website, specifically targeting news articles in the "world" category.
 The tool collects links to news articles, retrieves detailed information about 
 each article, and stores the data in a SQLite database.
 
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Modules](#modules)
+- [Tests](#tests)
+- [Acknowledgements](#acknowledgements)
+- [Contact Information](#contact-information)
+
+
+## Introduction
+The TRTHaber News Crawler is a robust web scraping tool designed to 
+automatically gather news articles from the TRTHaber website, focusing 
+specifically on the "World" category. This project aims to simplify the process
+of collecting news data by systematically crawling links, extracting relevant 
+information, and storing it in a SQLite database for easy access and analysis.
+
+With the increasing demand for real-time news updates, this crawler provides a 
+streamlined solution for aggregating important global news articles, making it 
+an invaluable resource for researchers, developers, and news enthusiasts alike.
+
+The crawler is built using Python and leverages popular libraries such as 
+BeautifulSoup for HTML parsing and Peewee for database interactions, ensuring 
+efficiency and reliability throughout the scraping process.
 ## Features
 
 - **Link Crawler**: Collects all article links from the "world" category.
 - **Article Crawler**: Retrieves detailed information for each article.
 - **SQLite Database**: Stores the collected data efficiently.
+
+## Project Structure
+my_project/
+├── my_project/
+│   ├── __init__.py
+│   ├── constants.py
+│   ├── database.py
+│   ├── article_page_parser.py
+│   ├── crawl.py
+│   ├── main.py
+│   └── ...
+├── tests/
+│   ├── __init__.py
+│   ├── test_article_page_parser.py
+│   ├── test_crawl.py
+│   └── ...
+├── README.md
+├── setup.py
+└── requirements.txt
 
 ## Installation
 
@@ -87,6 +133,9 @@ Entry point for the project. Contains commands for creating tables,
 crawling links, crawling articles, and showing statistics.
 
 **For more details, see the documentations in the code.**
+
+##Tests
+_this part will be added soon._
 
 ## Acknowledgements
 
