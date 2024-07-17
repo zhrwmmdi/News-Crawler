@@ -41,6 +41,7 @@ efficiency and reliability throughout the scraping process.
 ## Project Structure
 my_project/
 ├── my_project/
+
 │   ├── __init__.py
 │   ├── constants.py
 │   ├── database.py
